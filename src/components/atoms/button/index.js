@@ -1,0 +1,16 @@
+import { Icon } from "@iconify/react";
+import React from "react";
+
+import styles from "./button.module.scss";
+
+function Button(props) {
+  const { text, icon, handleClick, className, isDisabled } = props;
+  return (
+    <button className={`${styles.button} ${className}`} onClick={handleClick} disabled={isDisabled}>
+      {icon ? <Icon icon={icon} /> : null}
+      {text ? <h3>{text}</h3> : null}
+    </button>
+  );
+}
+
+export default Button;
