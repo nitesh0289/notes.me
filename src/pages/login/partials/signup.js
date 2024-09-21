@@ -1,18 +1,35 @@
-import { toast } from "react-toastify";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 import Button from "../../../components/atoms/button";
 import Input from "../../../components/atoms/input";
+import utils from "../../../utils/localstorage";
 import styles from "./partials.module.scss";
+import apis from "../../../apis";
 
 function Signup(props) {
+  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const navigate = useNavigate();
 
-  const handleSignup = () => {
-    //Logic for signup!
+  const handleSignup = async () => {
+    if (!email || !password || !name) {
+      toast.warning("Please fill all details!");
+      return;
+    }
+    setLoading(true);
+    const res = await apis.register({ email, password, name });
+    setLoading(false);
+    if (res.status === 201) {
+      toast.success("Signup successfull!");
+      utils.addToLocalStorage("login_cred", res.data.token);
+      navigate("/notes");
+    } else toast.error(res.data.message || "Something went wrong!");
   };
 
   return (
@@ -41,10 +58,11 @@ function Signup(props) {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button
-          text="Join with Email"
-          icon="material-symbols:login"
-          className={styles.emailBtn}
+          isDisabled={loading}
           handleClick={handleSignup}
+          className={styles.emailBtn}
+          icon={loading ? null : "material-symbols:login"}
+          text={loading ? <Icon icon={"svg-spinners:180-ring"} /> : "Join with Email"}
         />
       </article>
     </div>

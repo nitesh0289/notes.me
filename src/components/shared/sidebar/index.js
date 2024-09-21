@@ -29,7 +29,7 @@ function Sidebar() {
   };
 
   const handleLogout = () => {
-    utils.removeFromLocalStorage("auth_key");
+    utils.removeFromLocalStorage("login_cred");
     navigate("/");
   };
 

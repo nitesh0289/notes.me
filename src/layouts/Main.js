@@ -11,6 +11,13 @@ import utils from "../utils/localstorage";
 function Main() {
   const navigate = useNavigate();
 
+  //Restricting routing
+  useEffect(() => {
+    if (!Boolean(utils.getFromLocalStorage("login_cred"))) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <main className={styles.container}>
       <Suspense fallback={<Loader />}>
@@ -19,9 +26,7 @@ function Main() {
         <div className={styles.main}>
           {/* Navbar */}
           <Navbar />
-          <section className={styles.content}>
-            <Outlet />
-          </section>
+          <Outlet />
         </div>
       </Suspense>
     </main>

@@ -1,5 +1,7 @@
 .container {
-  display: flex;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 65px auto;
 
   .main {
     width: 100%;
