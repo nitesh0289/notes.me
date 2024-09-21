@@ -1,3 +1,7 @@
+const User = require("../models/users.model");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 async function register(req, res) {
   //!Task: register on platform
   const userDetails = req.body;
@@ -15,8 +19,9 @@ async function register(req, res) {
       password: passwordHash,
     });
 
-    await newUser.save();
-    res.status(201).json({ success: 201, message: "User is registered successfully!" });
+    const response = await newUser.save();
+    const token = jwt.sign({ userId: response._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    res.status(201).json({ success: 201, token, message: "User is registered successfully!" });
   } catch (error) {
     console.log({ error });
     res.status(500).json({ success: 500, message: `Error in signup, ${error}` });

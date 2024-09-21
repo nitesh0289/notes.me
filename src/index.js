@@ -10,7 +10,12 @@ require("dotenv").config();
 require("./db");
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  })
+);
 
 app.use("/api/notes", auth, notesRouter);
 app.use("/api/users", userRouter);
